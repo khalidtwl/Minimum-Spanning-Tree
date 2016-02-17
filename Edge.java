@@ -1,3 +1,7 @@
+/* This class defines Edge Objects
+Edges have a weight and connect two vertices
+*/
+
 public class Edge{
   int weight;
   Vertex prev, next;
