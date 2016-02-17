@@ -2,10 +2,10 @@ import java.util.ArrayList;
 
 // Standard Vertex Objects
 public class Vertex {
-  ArrayList neighbors;
+  ArrayList<Edge> neighbors;
 
   public Vertex(){
-    this.neighbors = new ArrayList();
+    this.neighbors = new ArrayList<Edge>();
   }
 }
 
