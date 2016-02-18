@@ -3,4 +3,4 @@ CompleteGraph g = new CompleteGraph(numpoints, dimension); // this will generate
 
 g.weight(1,2) // this will give weight between v1 and v2 
 
-try running "java CompleteGraph" to see example results 
+try running "javac CompleteGraph.java; java CompleteGraph" to see example results 
