@@ -2,13 +2,12 @@ import java.util.*;
 
 class CompleteGraph {
 
-    // adjacency list is an array of linkedlist
     private int[][] vertices;
     private double[][] weights;
-    // private double[][] graph;
 
     public CompleteGraph(int numpoints, int dimension) {
-        
+
+        // Last row is blank (maybe)
         vertices = new int[numpoints][];
         weights = new double[numpoints][];
 
@@ -17,13 +16,14 @@ class CompleteGraph {
 
         Random r = new Random(System.nanoTime());
 
+        // Randomly creates all the vertices for 2D and up
         double[][] coordinates = new double[numpoints][dimension];
         if (dimension > 0) {
             for (int v = 0; v < numpoints; v++) {
                 System.out.print("v" + v + "=(");
                 for (int d = 0; d < dimension; d++) {
                     coordinates[v][d] = r.nextDouble();
-                    System.out.print(coordinates[v][d] + ", ");
+                     System.out.print(coordinates[v][d] + ", ");
                 }
                 System.out.println(")");
             }
@@ -44,10 +44,11 @@ class CompleteGraph {
                     weight = r.nextDouble();
                 }
 
-                if (true) {         // edge elimination condition
+                // CHANGE
+                if (weight < 0.7) {         // edge elimination condition
                     temp_vertices[length] = v;
                     temp_weights[length] = weight;
-                    length++;                       
+                    length++;
                 }
             }
 
@@ -68,7 +69,7 @@ class CompleteGraph {
         }
     }
 
-    // return weight of an edge between v1 and v2, if not found return -1
+    // return weight of an edge between v1 and v2, if not found return -1 O(n)
     public double weight(int v1, int v2) {
 
         if (v1 > v2) {
