@@ -12,7 +12,6 @@ class randmst {
         int numtrials = Integer.parseInt(args[2]);
         int dimension = Integer.parseInt(args[3]);
 
-        long startTime = System.nanoTime();
         CompleteGraph cgraph = new CompleteGraph(numpoints, dimension);
         for (int i =0; i < numpoints; i++) {
             for (int j=0; j<numpoints; j++) {
@@ -23,6 +22,7 @@ class randmst {
             System.out.println();
         }
 
+        long startTime = System.nanoTime();
         // Prim's Algorithm
         MinHeap heap = new MinHeap(numpoints);         // initialize MinHeap of size numpoints
         boolean[] isInMST = new boolean[numpoints];    // if v[i] is true, vertex i has been included in MST
@@ -30,11 +30,13 @@ class randmst {
         while (!heap.isEmpty()) {
             int min_v = heap.deletemin();
             System.out.println("(" + min_v + "," + heap.vInMST + ")  "+  heap.min_dist);
-            isInMST[min_v] = true;
+            isInMST[min_v] = true; 
             for (int i = 0; i < numpoints; i++) {
-                double weight = cgraph.weight(min_v, i);
-                if (!isInMST[i] && weight < heap.dist[i] && weight > 0) {
-                    heap.change(i, weight, min_v);
+                if (!isInMST[i]) {
+                    double weight = cgraph.weight(min_v, i);
+                    if (weight > 0 && weight < heap.dist[i]) {
+                        heap.change(i, weight, min_v);
+                    }
                 }
             }
         }

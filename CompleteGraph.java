@@ -23,7 +23,7 @@ class CompleteGraph {
                 System.out.print("v" + v + "=(");
                 for (int d = 0; d < dimension; d++) {
                     coordinates[v][d] = r.nextDouble();
-                     System.out.print(coordinates[v][d] + ", ");
+                    System.out.print(coordinates[v][d] + ", ");
                 }
                 System.out.println(")");
             }
