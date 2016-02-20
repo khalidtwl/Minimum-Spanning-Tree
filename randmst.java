@@ -13,11 +13,11 @@ class randmst {
         int dimension = Integer.parseInt(args[3]);
 
         long startTime = System.nanoTime();
-        CompleteGraph c = new CompleteGraph(numpoints, dimension);
+        CompleteGraph cgraph = new CompleteGraph(numpoints, dimension);
         for (int i =0; i < numpoints; i++) {
             for (int j=0; j<numpoints; j++) {
-                if (c.weight(i,j) >= 0) {
-                    System.out.print(String.format("v%dv%d = %.2f  ", i, j, c.weight(i,j)));
+                if (cgraph.weight(i,j) >= 0) {
+                    System.out.print(String.format("v%dv%d = %.2f  ", i, j, cgraph.weight(i,j)));
                 }
             }
             System.out.println();
@@ -28,12 +28,13 @@ class randmst {
         boolean[] isInMST = new boolean[numpoints];    // if v[i] is true, vertex i has been included in MST
         
         while (!heap.isEmpty()) {
-            int v = heap.deletemin();
-            System.out.println("(" + v + "," + heap.u + ")  "+  heap.min_dist);
-            isInMST[v] = true;
+            int min_v = heap.deletemin();
+            System.out.println("(" + min_v + "," + heap.vInMST + ")  "+  heap.min_dist);
+            isInMST[min_v] = true;
             for (int i = 0; i < numpoints; i++) {
-                if (!isInMST[i] && c.weight(v,i) < heap.dist[i] && c.weight(v,i) > 0) {
-                    heap.change(i, c.weight(v,i), v);
+                double weight = cgraph.weight(min_v, i);
+                if (!isInMST[i] && weight < heap.dist[i] && weight > 0) {
+                    heap.change(i, weight, min_v);
                 }
             }
         }

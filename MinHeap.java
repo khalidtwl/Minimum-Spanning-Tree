@@ -8,17 +8,26 @@ class MinHeap {
     // the edge between vertex i and vertex mst_vertices[i] has length dist[i]
     private int[] mst_vertices;     
 
+    // the distance between the min vertex and some vertex in MST
     public double min_dist = -1.0;
-    public int u = -1;              // vertex in MST that is connected to min vertex
 
+    // vertex in MST that is connected to min vertex
+    public int vInMST = -1;              
+
+    // size of the heap
     private int size;
 
+    /***
+     * Initialize the size of the heap and array dist[] and mst_vertices[]
+     * Set all elements in dist[] to Double.MAX_VALUE, and choose v0 as a starting
+     * vertex for Prim's algorithm (that is make dist[0] = 0).
+     **/
     public MinHeap(int size) {
         this.size = size;
         dist = new double[size];
         mst_vertices = new int[size];
         Arrays.fill(dist, Double.MAX_VALUE);
-        dist[0] = 0;
+        dist[0] = 0;    // Make Prim's start at v0
     }
 
     /***
@@ -39,7 +48,7 @@ class MinHeap {
         }
         dist[v] = Double.MAX_VALUE;
         min_dist = min;
-        u = mst_vertices[v];
+        vInMST = mst_vertices[v];
         size--;
 
         return v;
@@ -56,6 +65,10 @@ class MinHeap {
         mst_vertices[v] = some_mst_vertex;  
     }
 
+
+    /***
+     * return true if heap is empty 
+     **/
     public boolean isEmpty() {
         return size == 0;
     }

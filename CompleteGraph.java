@@ -45,7 +45,7 @@ class CompleteGraph {
                 }
 
                 // CHANGE
-                if (weight < 0.7) {         // edge elimination condition
+                if (true) {         // edge elimination condition
                     temp_vertices[length] = v;
                     temp_weights[length] = weight;
                     length++;
