@@ -2,10 +2,8 @@ import java.util.*;
 
 class CompleteGraph {
 
-    // adjacency list is an array of linkedlist
     private int[][] vertices;
     private double[][] weights;
-    // private double[][] graph;
 
     public CompleteGraph(int numpoints, int dimension) {
         

@@ -23,21 +23,18 @@ class randmst {
             System.out.println();
         }
 
-        MinHeap h = new MinHeap(numpoints);
-        boolean[] isInTree = new boolean[numpoints];
-        int v = -1;
-        int n = numpoints;
-        while(n != 0) {
-            h.deletemin();
-            v = h.min_v;
-            System.out.println("(" + v + "," + h.u + ")  "+  h.min_dist);
-            isInTree[v] = true;
+        MinHeap heap = new MinHeap(numpoints);         // initialize MinHeap of size numpoints
+        boolean[] isInMST = new boolean[numpoints];    // if v[i] is true, vertex i has been included in MST
+        
+        while (!heap.isEmpty()) {
+            int v = heap.deletemin();
+            System.out.println("(" + v + "," + heap.u + ")  "+  heap.min_dist);
+            isInMST[v] = true;
             for (int i = 0; i < numpoints; i++) {
-                if (isInTree[i] == false && c.weight(v,i) < h.dist[i]) {
-                    h.insert(i, c.weight(v,i), v);
+                if (!isInMST[i] && c.weight(v,i) < heap.dist[i]) {
+                    heap.change(i, c.weight(v,i), v);
                 }
             }
-            n--;
         }
 
     }
