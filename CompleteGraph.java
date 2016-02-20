@@ -1,145 +1,111 @@
-import java.util.Random;
+import java.util.*;
 
 class CompleteGraph {
 
     // adjacency list is an array of linkedlist
-    private LinkedList[] graph;
-
+    private int[][] vertices;
+    private double[][] weights;
+    // private double[][] graph;
 
     public CompleteGraph(int numpoints, int dimension) {
         
-        // initialize adjacency list to store weights between vertices
-        graph = new LinkedList[numpoints];
-        for (int v = 0; v < numpoints; v++) {
-            graph[v] = new LinkedList();
-        }
+        vertices = new int[numpoints][];
+        weights = new double[numpoints][];
 
-        Random r = new Random();
+        int[] temp_vertices = new int[numpoints];
+        double[] temp_weights = new double[numpoints];
 
-        // if dimension is 0, each edge is between 0 and 1
-        if (dimension == 0) {
-            for (int current_v = 0; current_v < numpoints; current_v++) {
-                for (int v = current_v + 1; v < numpoints; v++) {
-                    r.setSeed(System.nanoTime());
-                    double weight = r.nextDouble();
-                    graph[current_v].append(v, weight);
-                    graph[v].append(current_v, weight);
-                }
-            }
-        }
-        // otherwise, randomly assign coordinates to vertices between (0,1)
-        // and compute weights between edges
-        else {
+        Random r = new Random(System.nanoTime());
 
-            // generate random coordinates for numpoints vertices
-            double[][] vertices = new double[numpoints][dimension];
+        double[][] coordinates = new double[numpoints][dimension];
+        if (dimension > 0) {
             for (int v = 0; v < numpoints; v++) {
+                System.out.print("v" + v + "=(");
                 for (int d = 0; d < dimension; d++) {
-                    r.setSeed(System.nanoTime());
-                    vertices[v][d] = r.nextDouble();
+                    coordinates[v][d] = r.nextDouble();
+                    System.out.print(coordinates[v][d] + ", ");
                 }
+                System.out.println(")");
             }
+        }
 
-            
-
-            // calculate weight between all edges and put it in adjacency list 
-            for (int current_v = 0; current_v < numpoints; current_v++) {
-                
-                for (int v = 0; v < numpoints; v++) {
-                    if (v == current_v) {
-                        continue;
-                    }
-                    double weight = 0;
+        for (int current_v = 0; current_v < numpoints; current_v++) {
+            int length = 0;
+            for (int v = current_v + 1; v < numpoints; v++) {
+                double weight = 0;
+                if (dimension > 0) {
                     for (int d = 0; d < dimension; d++) {
-                        weight += Math.pow(vertices[current_v][d] - vertices[v][d], 2);
+                        double diff = coordinates[current_v][d] - coordinates[v][d];
+                        weight += diff * diff;
                     }
                     weight = Math.sqrt(weight);
-                    graph[current_v].append(v, weight);
                 }
+                else if (dimension == 0) {
+                    weight = r.nextDouble();
+                }
+
+                if (true) {         // edge elimination condition
+                    temp_vertices[length] = v;
+                    temp_weights[length] = weight;
+                    length++;                       
+                }
+            }
+
+            vertices[current_v] = new int[length];
+            weights[current_v] = new double[length];
+
+            for (int i = 0; i < length; i++) {
+                vertices[current_v][i] = temp_vertices[i];
+                weights[current_v][i] = temp_weights[i];
             }
         }
 
+        for (int i = 0; i < weights.length; i++) {
+            for (int j = 0; j < weights[i].length; j++) {
+                System.out.print(String.format("v%dv%d = %.2f  ", i, vertices[i][j], weights[i][j]));
+            }
+            System.out.println();
+        }
     }
 
     // return weight of an edge between v1 and v2, if not found return -1
     public double weight(int v1, int v2) {
-        return this.graph[v1].getWeight(v2);
-    }
 
-
-    public static void main(String[] args) {
-        CompleteGraph c = new CompleteGraph(10, 3); // 10 vertices in 3D
-        int length = c.graph.length;
-        for (int i = 0; i < length; i++) {
-            System.out.print("v" + i + ": ");
-            c.graph[i].display();
+        if (v1 > v2) {
+            int temp = v1;
+            v1 = v2;
+            v2 = temp;
+        }
+        else if (v1 == v2) {
+            return -1.0;
         }
 
-        System.out.println((String.format("v%dv%d = %.2f", 0, 5, c.weight(0,5))));
-    }
-
-
-
-    class LinkedList {
-
-        public Node root;   // root points to the first element
-        private Node head;  // head points to the last element
-
-        public LinkedList() {
-            root = null;
-            head = null;
-        }
-
-        // append a new element to linkedlist 
-        public void append(int vertex, double weight) {
-
-            if (root == null) {
-                root = new Node(vertex, weight);
-                head = root;
-                return;
+        for (int v = 0, len = vertices[v1].length ; v < v2 && v < len; v++) {
+            if (vertices[v1][v] == v2) {
+                return weights[v1][v];
             }
-
-            head.next = new Node(vertex, weight);
-            head = head.next;
-
-        }
-
-        // return weight, if vertex is not found return -1
-        public double getWeight(int vertex) {
-            double weight = -1;
-            Node current_node = root;
-
-            while (current_node != null) {
-                if (current_node.vertex == vertex) {
-                    weight = current_node.weight;
-                }
-                current_node = current_node.next;
-            }
-
-            return weight;
-        }
-
-        public void display() {
-            Node current_node = root;
-            while (current_node != null) {
-                System.out.print(String.format("(v%d, w=%.2f) ", current_node.vertex, current_node.weight));
-                current_node = current_node.next;
-            }  
-            System.out.println();          
-        }
-
-        class Node {
-            public int vertex;
-            public double weight;
-            public Node next;
-            public Node(int vertex, double weight) {
-                this.vertex = vertex;
-                this.weight = weight;
-                this.next = null;
+            else if (vertices[v1][v] > v2) {
+                break;
             }
         }
 
+        return -1.0;
     }
 
+
+    // public static void main(String[] args) {
+    //     long startTime = System.nanoTime();
+    //     CompleteGraph c = new CompleteGraph(7, 3); // 10 vertices in 3D
+    //     long endTime = System.nanoTime();
+    //     // System.out.println((endTime-startTime)/1000000000.0);
+
+    //     for (int i = 0; i < c.weights.length; i++) {
+    //         for (int j = 0; j < c.weights[i].length; j++) {
+    //             System.out.print(String.format("v%dv%d = %.2f  ", i, c.vertices[i][j], weights[i][j]));
+    //         }
+    //         System.out.println();
+    //     }
+
+    // }
 
 }
