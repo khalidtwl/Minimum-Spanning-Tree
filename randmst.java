@@ -13,14 +13,14 @@ class randmst {
         int dimension = Integer.parseInt(args[3]);
 
         CompleteGraph cgraph = new CompleteGraph(numpoints, dimension);
-        for (int i =0; i < numpoints; i++) {
-            for (int j=0; j<numpoints; j++) {
-                if (cgraph.weight(i,j) >= 0) {
-                    System.out.print(String.format("v%dv%d = %.2f  ", i, j, cgraph.weight(i,j)));
-                }
-            }
-            System.out.println();
-        }
+        // for (int i =0; i < numpoints; i++) {
+        //     for (int j=0; j<numpoints; j++) {
+        //         if (cgraph.weight(i,j) >= 0) {
+        //             System.out.print(String.format("v%dv%d = %.2f  ", i, j, cgraph.weight(i,j)));
+        //         }
+        //     }
+        //     System.out.println();
+        // }
 
         long startTime = System.nanoTime();
         // Prim's Algorithm
@@ -29,6 +29,9 @@ class randmst {
         
         while (!heap.isEmpty()) {
             int min_v = heap.deletemin();
+            if (heap.min_dist > 10.0) {
+                System.out.println("error");
+            }
             System.out.println("(" + min_v + "," + heap.vInMST + ")  "+  heap.min_dist);
             isInMST[min_v] = true; 
             for (int i = 0; i < numpoints; i++) {
