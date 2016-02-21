@@ -20,17 +20,20 @@ class CompleteGraph {
 
         // any edge with weight > r is thrown away. Please see the report for more detailed derivation
         double r = Double.MAX_VALUE;
-        double epsilon = 1e-16;
-        switch (dimension) {
-            case 0: r = Math.sqrt(2.0 * (1.0 - Math.pow(epsilon, 1.0/((double)numpoints - 2.0))));
-            case 2: r = Math.sqrt(4.0/Math.PI * (1.0 - Math.pow(epsilon,1.0/((double)numpoints-1.0))));
-                    break;
-            case 3: r = Math.pow(6.0/Math.PI * (1.0 - Math.pow(epsilon,1.0/((double)numpoints-1.0))), 1.0/3.0);
-                    break;
-            case 4: r = Math.pow(8.0/Math.PI * (1.0 - Math.pow(epsilon,1.0/((double)numpoints-1.0))), 1.0/4.0);
-            default: break;
+        if (numpoints >= 2) {
+            double epsilon = 1e-16;
+            switch (dimension) {
+                case 0: r = Math.sqrt(2.0 * (1.0 - Math.pow(epsilon, 1.0/((double)numpoints - 2.0))));
+                        break;
+                case 2: r = Math.sqrt(4.0/Math.PI * (1.0 - Math.pow(epsilon,1.0/((double)numpoints-1.0))));
+                        break;
+                case 3: r = Math.pow(6.0/Math.PI * (1.0 - Math.pow(epsilon,1.0/((double)numpoints-1.0))), 1.0/3.0);
+                        break;
+                case 4: r = Math.pow(8.0/Math.PI * (1.0 - Math.pow(epsilon,1.0/((double)numpoints-1.0))), 1.0/4.0);
+                default: break;
+            }
         }
-        System.out.println(r);
+        System.out.println("r=" + r);
 
         // Randomly creates all the vertices for 2D and up
         double[][] coordinates = new double[numpoints][dimension];
@@ -44,7 +47,7 @@ class CompleteGraph {
                 // System.out.println(")");
             }
         }
-        
+        int total = 0;
         // calculate weights and store then in weights[][] and vertices[][]
         for (int current_v = 0; current_v < numpoints; current_v++) {
             int length = 0;
@@ -61,10 +64,15 @@ class CompleteGraph {
                     weight = rand.nextDouble();
                 }
 
+                if (weight < 0.5) {
+                    total++;
+                }
+
                 if (weight < r) {         // edge elimination condition
                     temp_vertices[length] = v;
                     temp_weights[length] = weight;
                     length++;
+                    total++;
                 }
             }
 
@@ -76,6 +84,7 @@ class CompleteGraph {
                 weights[current_v][i] = temp_weights[i];
             }
         }
+        System.out.println("Number of edges: " + total);
 
         // for (int i = 0; i < weights.length; i++) {
         //     for (int j = 0; j < weights[i].length; j++) {

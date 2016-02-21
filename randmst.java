@@ -12,6 +12,12 @@ class randmst {
         int numtrials = Integer.parseInt(args[2]);
         int dimension = Integer.parseInt(args[3]);
 
+        if (dimension < 0 || dimension == 1 || dimension > 4)
+            return;
+
+        if (numpoints < 1)
+            return;
+
         CompleteGraph cgraph = new CompleteGraph(numpoints, dimension);
         // for (int i =0; i < numpoints; i++) {
         //     for (int j=0; j<numpoints; j++) {
@@ -29,10 +35,7 @@ class randmst {
         
         while (!heap.isEmpty()) {
             int min_v = heap.deletemin();
-            if (heap.min_dist > 10.0) {
-                System.out.println("error");
-            }
-            System.out.println("(" + min_v + "," + heap.vInMST + ")  "+  heap.min_dist);
+            // System.out.println("(" + min_v + "," + heap.vInMST + ")  "+  heap.min_dist);
             isInMST[min_v] = true; 
             for (int i = 0; i < numpoints; i++) {
                 if (!isInMST[i]) {
@@ -44,7 +47,7 @@ class randmst {
             }
         }
         long endTime = System.nanoTime();
-        System.out.println((endTime-startTime)/1000000000.0);
+        System.out.println("total time:" + (endTime-startTime)/1000000000.0);
 
     }
 
