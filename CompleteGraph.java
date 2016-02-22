@@ -89,7 +89,7 @@ class CompleteGraph
               weights[current_v][i] = temp_weights[i];
           }
       }
-      System.out.println("Number of edges: " + total);
+      // System.out.println("Number of edges: " + total);
     }
 
     /***
