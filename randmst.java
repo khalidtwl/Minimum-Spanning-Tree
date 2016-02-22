@@ -1,24 +1,34 @@
 import java.util.*;
 
-class randmst {
-
+class randmst
+{
     static double x[][];
-    public static void main(String[] args) {
+    public static void main(String[] args)
+    {
+      if (args.length != 4)
+        return;
 
-        if (args.length != 4)
-            return;
+      // Command-Line Arguments
+      int numpoints = Integer.parseInt(args[1]);
+      int numtrials = Integer.parseInt(args[2]);
+      int dimension = Integer.parseInt(args[3]);
 
-        int numpoints = Integer.parseInt(args[1]);
-        int numtrials = Integer.parseInt(args[2]);
-        int dimension = Integer.parseInt(args[3]);
+      if (dimension < 0 || dimension == 1 || dimension > 4)
+      {
+        System.out.println("Invalid Dimension");
+        return;
+      }
 
-        if (dimension < 0 || dimension == 1 || dimension > 4)
-            return;
+      if (numpoints < 1 || numtrials < 1)
+      {
+        System.out.println("Invalid number of points/trials");
+      }
 
-        if (numpoints < 1)
-            return;
-
+      for (int trials = 0; trials < numtrials; trials++)
+      {
+        // Generates a complete graph
         CompleteGraph cgraph = new CompleteGraph(numpoints, dimension);
+        // cgraph.printGraph();
         // for (int i =0; i < numpoints; i++) {
         //     for (int j=0; j<numpoints; j++) {
         //         if (cgraph.weight(i,j) >= 0) {
@@ -29,26 +39,40 @@ class randmst {
         // }
 
         long startTime = System.nanoTime();
-        // Prim's Algorithm
-        MinHeap heap = new MinHeap(numpoints);         // initialize MinHeap of size numpoints
-        boolean[] isInMST = new boolean[numpoints];    // if v[i] is true, vertex i has been included in MST
-        
-        while (!heap.isEmpty()) {
-            int min_v = heap.deletemin();
-            // System.out.println("(" + min_v + "," + heap.vInMST + ")  "+  heap.min_dist);
-            isInMST[min_v] = true; 
-            for (int i = 0; i < numpoints; i++) {
-                if (!isInMST[i]) {
-                    double weight = cgraph.weight(min_v, i);
-                    if (weight > 0 && weight < heap.dist[i]) {
-                        heap.change(i, weight, min_v);
-                    }
-                }
-            }
+
+        /***
+         * Prim's Algorithm
+         **/
+
+        // Initializes a MinHeap
+        MinHeap heap = new MinHeap(numpoints);
+        // Keeps track of whether vertex i is in our MST
+        boolean[] isInMST = new boolean[numpoints];
+
+        double weight_of_tree = 0.0;
+
+        while (!heap.isEmpty())
+        {
+          // Pop off the closest neighbor
+          int min_v = heap.deletemin();
+          weight_of_tree += heap.min_dist;
+          // System.out.println("(" + min_v + "," + heap.vInMST + ")  "+  heap.min_dist);
+
+          // Mark that the chosen vertex is now in our MST
+          isInMST[min_v] = true;
+          for (int i = 0; i < numpoints; i++)
+          {
+              if (!isInMST[i])
+              {
+                  double weight = cgraph.weight(min_v, i);
+                  if (weight > 0 && weight < heap.dist[i])
+                      heap.change(i, weight, min_v);
+              }
+          }
         }
         long endTime = System.nanoTime();
-        System.out.println("total time:" + (endTime-startTime)/1000000000.0);
-
+        System.out.println("Total Time: " + (endTime-startTime)/1000000000.0 + " seconds.");
+        System.out.println("Weight of Tree: " + weight_of_tree + "\n");
+      }
     }
-
 }
