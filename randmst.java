@@ -28,24 +28,15 @@ class randmst
       {
         // Generates a complete graph
         CompleteGraph cgraph = new CompleteGraph(numpoints, dimension);
-        // cgraph.printGraph();
-        // for (int i =0; i < numpoints; i++) {
-        //     for (int j=0; j<numpoints; j++) {
-        //         if (cgraph.weight(i,j) >= 0) {
-        //             System.out.print(String.format("v%dv%d = %.2f  ", i, j, cgraph.weight(i,j)));
-        //         }
-        //     }
-        //     System.out.println();
-        // }
 
+        // for time measurement
         long startTime = System.nanoTime();
 
-        /***
-         * Prim's Algorithm
-         **/
-
+   
+        // Prim's Algorithm starts here
         // Initializes a MinHeap
         MinHeap heap = new MinHeap(numpoints);
+
         // Keeps track of whether vertex i is in our MST
         boolean[] isInMST = new boolean[numpoints];
 
