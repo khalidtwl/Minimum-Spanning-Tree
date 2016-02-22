@@ -47,7 +47,6 @@ class randmst
           // Pop off the closest neighbor
           int min_v = heap.deletemin();
           weight_of_tree += heap.min_dist;
-          // System.out.println("(" + min_v + "," + heap.vInMST + ")  "+  heap.min_dist);
 
           // Mark that the chosen vertex is now in our MST
           isInMST[min_v] = true;

@@ -3,4 +3,8 @@ CompleteGraph g = new CompleteGraph(numpoints, dimension); // this will generate
 
 g.weight(1,2) // this will give weight between v1 and v2
 
-try running "make; java randmst 0 <# nodes> <# trials> <dimension>" to see example results
+TO COMPILE
+Just type "make" in terminal when you are in the directory.
+
+RUNNING
+After the code is compiled, simply type "java randmst 0 <# nodes> <# trials> <dimension>"
